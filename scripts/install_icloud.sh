@@ -1,3 +1,4 @@
+#!/bin/bash
 set -x -e
 echo "Extracting iCloud..." && wine iCloudSetup.exe /extract
 echo "Installing Application Support..." && wine MsiExec.exe /i AppleApplicationSupport.msi /qn
