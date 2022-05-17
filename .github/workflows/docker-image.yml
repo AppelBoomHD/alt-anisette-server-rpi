@@ -40,12 +40,29 @@ jobs:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
-          
+       
+      - name: Docker meta
+        id: anisette_armv7_meta # you'll use this in the next step
+        uses: docker/metadata-action@v3
+        with:
+          # list of Docker images to use as base name for tags
+          images: |
+            ghcr.io/caaruiz/alt-anisette-server-test
+          # Docker tags based on the following events/attributes
+          tags: |
+            type=schedule
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{major}}
+            type=sha       
+            
       - name: Build and push
         uses: docker/build-push-action@v2
         with:
           context: .
           platforms: linux/arm/v7
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.ARMv7.outputs.tags }}
-          labels: ${{ steps.ARMv7.outputs.labels }}
+          tags: ${{ steps.anisette_armv7_meta.outputs.tags }}
+          labels: ${{ steps.anisette_armv7_meta.outputs.labels }}
