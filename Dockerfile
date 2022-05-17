@@ -21,6 +21,8 @@ ADD http_wrap/server* /app/
 ADD anisette_extract/Release/AltWindowsAnisette.exe /app/
 ADD scripts/* /app/
 
+RUN chmod -R +x /app/
+
 EXPOSE 6969
 
 CMD ["/app/run_icloud.sh"]
